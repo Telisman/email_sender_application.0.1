@@ -4,11 +4,15 @@
     <title>Home Page</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-
 </head>
 <body>
 <main class="main flow">
+
   <h1 class="main__heading">Excel to Email application</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data" id="excelForm" >
+      <input type="file" name="excel_file" class="card__cta cta">
+      <input type="hidden" name="operation" id="operationInput" value="">
+    </form>
   <div class="main__cards cards">
     <div class="cards__inner">
       <div class="cards__card card">
@@ -18,38 +22,34 @@
           <li>Option to insert only the email column in our email application (form)</li>
           <li>Edit default subject</li>
         </ul>
-        <a href="#basic" class="card__cta cta">Get Started</a>
+        <a href="javascript:void(0);" onclick="triggerFormSubmit('Collect Emails')" class="card__cta cta">Select email</a>
       </div>
 
       <div class="cards__card card">
         <h2 class="card__heading">Email and subject</h2>
         <p class="card__price">$0.00</p>
         <ul role="list" class="card__bullets flow">
-          <li>Input email and subject from are exel file</li>
+          <li>Input email and subject from are excel file</li>
           <li>Customize subject</li>
         </ul>
-        <a href="#pro" class="card__cta cta">Upgrade to Pro</a>
+        <a href="javascript:void(0);" onclick="triggerFormSubmit('Collect Subjects')" class="card__cta cta">Select subject</a>
       </div>
 
       <div class="cards__card card">
         <h2 class="card__heading">Subject</h2>
         <p class="card__price">$0.00</p>
         <ul role="list" class="card__bullets flow">
-          <li>Input subject from are exel file</li>
+          <li>Input subject from are excel file</li>
           <li>Customize subject</li>
           <li>Insert email manually</li>
         </ul>
-        <a href="#ultimate" class="card__cta cta">Go Ultimate</a>
+        <a href="javascript:void(0);" onclick="triggerFormSubmit('Collect Both Email and Subject')" class="card__cta cta">Select Email and Subject</a>
       </div>
     </div>
 
     <div class="overlay cards__inner"></div>
   </div>
 </main>
-<!--<form action="/upload" method="POST" enctype="multipart/form-data">-->
-<!--    <input type="file" name="excel_file" accept=".xlsx, .xls">-->
-<!--    <button type="submit">Upload Excel File</button>-->
-<!--  </form>-->
 
 </body>
 </html>

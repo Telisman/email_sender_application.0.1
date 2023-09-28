@@ -46,3 +46,10 @@ document.addEventListener("DOMContentLoaded", function() {
     cards.forEach(initOverlayCard);
     document.body.addEventListener("pointermove", applyOverlayMask);
 });
+function triggerFormSubmit(operation) {
+    // Set the operation value in the hidden input field
+    document.getElementById('operationInput').value = operation;
+
+    // Submit the form
+    document.getElementById('excelForm').submit();
+}

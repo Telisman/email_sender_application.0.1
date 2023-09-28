@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 
 app = Flask(__name__, static_folder='static')
+
+# Define a dictionary to map operation names to processing functions
+operations = {
+    'Collect Emails': lambda df: df['email'].tolist() if 'email' in df.columns else None,
+    'Collect Subjects': lambda df: df['subject'].tolist() if 'subject' in df.columns else None,
+    'Collect Both Email and Subject': lambda df: df[['email', 'subject']].to_dict(orient='records') if 'email' in df.columns and 'subject' in df.columns else None
+}
 
 @app.route('/')
 def home():
@@ -17,29 +24,23 @@ def upload_file():
     if file.filename == '':
         return "No selected file"
 
+    operation = request.form.get('operation')
+
     if file:
-        # Assuming the file is in Excel format (xlsx)
         try:
             df = pd.read_excel(file)
         except Exception as e:
             return f"Error reading the file: {str(e)}"
 
-        file_columns = df.columns.tolist()
+        if operation in operations:
+            result = operations[operation](df)
+            if result is not None:
+                message = f"{operation} data collected"
+                return jsonify({"message": message, "data": result})
+            else:
+                return f"{operation} data not found in the file."
 
-        required_columns = ['email', 'subject', 'first name', 'last name']
-
-        missing_columns = [col for col in required_columns if col not in file_columns]
-
-        if missing_columns:
-            missing_msg = f"The following required columns are missing: {', '.join(missing_columns)}"
-        else:
-            missing_msg = "All required columns are present in the Excel file."
-
-        present_columns_msg = f"Columns present in the file: {', '.join(file_columns)}"
-
-        print(df.head())
-
-        return f"{present_columns_msg}<br>{missing_msg}"
+    return "Invalid operation or an error occurred."
 
 if __name__ == '__main__':
     app.run()
